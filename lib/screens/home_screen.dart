@@ -1,4 +1,5 @@
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:sms/sms.dart';
 import 'package:the_third/index.dart';
 
 //import 'package:flutter_sms/flutter_sms.dart';
@@ -9,9 +10,13 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+
   String _title = "Trang chủ";
 
   bool isLoading = false;
+
+  String _receiver = "";
 
   static TextEditingController _device1TextController =
       new TextEditingController();
@@ -56,21 +61,49 @@ class _HomeScreenState extends State<HomeScreen> {
   static List<DeviceType> listDevices =
       initDeviceData.map((i) => DeviceType.fromJson(i)).toList();
 
-  void _sendSMS(DeviceType device) async {
-    String _messageContent =
-        "${device.name}${device.isOn ? 'B' : 'T'}${device.isDelay ? '.${device.delayTime}' : ''}";
-
+  void _sendSMS(String _message) async {
     setState(() {
       isLoading = true;
     });
 
-    Future.delayed(Duration(milliseconds: 300), () {
-      print("Message will send $_messageContent");
+    SmsSender sender = new SmsSender();
+    SmsMessage message = new SmsMessage(_receiver, _message);
+    message.onStateChanged.listen((state) {
+      if (state == SmsMessageState.Sent) {
+      } else if (state == SmsMessageState.Fail) {
+      }
+    });
+    sender.sendSms(message);
 
+    Future.delayed(Duration(milliseconds: 300), () {
+      print("Message will send $message");
       setState(() {
         isLoading = false;
       });
     });
+  }
+
+  _deviceSendSMS(DeviceType device) async {
+    String _messageContent =
+        "${device.name}${device.isOn ? 'B' : 'T'}${device.isDelay ? '.${device.delayTime}' : ''}";
+    print("Message $_messageContent => Receiver:$_receiver");
+
+//    _sendSMS(_messageContent);
+
+  }
+
+  _getNumber() async {
+    final SharedPreferences prefs = await _prefs;
+    setState(() {
+      _receiver = prefs.getString(KEY_PHONE);
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _getNumber();
   }
 
   @override
@@ -96,24 +129,27 @@ class _HomeScreenState extends State<HomeScreen> {
           color: Colors.black,
           child: Column(
             children: <Widget>[
-
               /// Title
               Container(
-                margin: EdgeInsets.only(top: 20, bottom: 20 , left: 30, right: 30),
-                child: Text("AT04 - GSM CONTROLLER",
+                margin:
+                    EdgeInsets.only(top: 20, bottom: 20, left: 30, right: 30),
+                child: Text(
+                  "AT04 - GSM CONTROLLER",
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 23,
-                  fontWeight: FontWeight.bold
-                ),),
+                      color: Colors.white,
+                      fontSize: 23,
+                      fontWeight: FontWeight.bold),
+                ),
               ),
 
               /// Devices
               for (DeviceType device in listDevices)
                 Container(
-                  margin: EdgeInsets.only(top: 20, bottom: 20 , left: 30, right: 30),
-                  padding: EdgeInsets.only(top: 20, bottom: 20 , left: 30, right: 30),
+                  margin:
+                      EdgeInsets.only(top: 20, bottom: 20, left: 30, right: 30),
+                  padding:
+                      EdgeInsets.only(top: 20, bottom: 20, left: 30, right: 30),
                   decoration: BoxDecoration(
 //                      color: Colors.red,
                       borderRadius: BorderRadius.all(Radius.circular(5)),
@@ -136,7 +172,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             onChanged: (value) {
                               setState(() {
                                 device.isOn = value;
-                                _sendSMS(device);
+                                _deviceSendSMS(device);
                               });
                             },
                             inactiveThumbColor: Colors.red,
@@ -152,9 +188,11 @@ class _HomeScreenState extends State<HomeScreen> {
                         margin: EdgeInsets.only(left: 10, right: 10),
                         child: Column(
                           children: <Widget>[
-                           SvgPicture.asset(icCalendar,
-                             height: 20,
-                             width: 20,),
+                            SvgPicture.asset(
+                              icCalendar,
+                              height: 20,
+                              width: 20,
+                            ),
                             Checkbox(
                               value: device.isDelay,
                               checkColor: Colors.white,
@@ -169,53 +207,55 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                       // TODO: Input delay time
-                        Expanded(
-                          child: Column(
-                            children: <Widget>[
-                              Text("0 ~ 9999", style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16
-                              ),),
-                              Container(
-                                width: 200,
-                                child: TextField(
-                                  cursorColor: Colors.white,
-                                  keyboardType: TextInputType.number,
-
-                                  decoration: InputDecoration(
-                                    fillColor: Colors.white,
-                                    focusedBorder: const OutlineInputBorder(
-                                        borderSide: const BorderSide(color: Colors.white, width: 3)
-                                    ),
-                                    disabledBorder: const OutlineInputBorder(
-                                      borderSide: const BorderSide(color: Colors.grey, width: 2),
-                                    ),
-                                    enabledBorder: const OutlineInputBorder(
-                                      borderSide: const BorderSide(color: Colors.white, width: 2),
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderSide: new BorderSide(color: Colors.white),
-                                    ),
-                                    focusColor: Colors.white,
-
-                                    contentPadding:
-                                    EdgeInsets.only(bottom: 10.0, left: 10.0, right: 10.0),
+                      Expanded(
+                        child: Column(
+                          children: <Widget>[
+                            Text(
+                              "0 ~ 9999",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 16),
+                            ),
+                            Container(
+                              width: 200,
+                              child: TextField(
+                                cursorColor: Colors.white,
+                                keyboardType: TextInputType.number,
+                                decoration: InputDecoration(
+                                  fillColor: Colors.white,
+                                  focusedBorder: const OutlineInputBorder(
+                                      borderSide: const BorderSide(
+                                          color: Colors.white, width: 3)),
+                                  disabledBorder: const OutlineInputBorder(
+                                    borderSide: const BorderSide(
+                                        color: Colors.grey, width: 2),
                                   ),
-                                  style: TextStyle(
-                                    color: Colors.white,
+                                  enabledBorder: const OutlineInputBorder(
+                                    borderSide: const BorderSide(
+                                        color: Colors.white, width: 2),
                                   ),
-                                  enabled: device.isDelay,
-                                  controller: device.textController,
-                                  onChanged: (v) {
-                                    setState(() {
-                                      device.delayTime = int.parse(v);
-                                    });
-                                  },
+                                  border: OutlineInputBorder(
+                                    borderSide:
+                                        new BorderSide(color: Colors.white),
+                                  ),
+                                  focusColor: Colors.white,
+                                  contentPadding: EdgeInsets.only(
+                                      bottom: 10.0, left: 10.0, right: 10.0),
                                 ),
-                              )
-                            ],
-                          ),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                                enabled: device.isDelay,
+                                controller: device.textController,
+                                onChanged: (v) {
+                                  setState(() {
+                                    device.delayTime = int.parse(v);
+                                  });
+                                },
+                              ),
+                            )
+                          ],
                         ),
+                      ),
                     ],
                   ),
                 )
