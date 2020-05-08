@@ -2,14 +2,14 @@ import 'package:the_third/index.dart';
 
 Widget customAppBarHome(String _title) {
   return AppBar(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.black,
       bottomOpacity: 0.0,
       elevation: 0.0,
       automaticallyImplyLeading: false,
       title: Text(
         _title,
         style: TextStyle(
-            color: Colors.black,
+            color: Colors.white,
             fontSize: 24,
             fontWeight: FontWeight.bold),
       ),

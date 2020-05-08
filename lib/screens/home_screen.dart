@@ -62,25 +62,28 @@ class _HomeScreenState extends State<HomeScreen> {
       initDeviceData.map((i) => DeviceType.fromJson(i)).toList();
 
   void _sendSMS(String _message) async {
-    setState(() {
-      isLoading = true;
-    });
+    try {
+      setState(() {
+        isLoading = true;
+      });
 
-    SmsSender sender = new SmsSender();
-    SmsMessage message = new SmsMessage(_receiver, _message);
-    message.onStateChanged.listen((state) {
-      if (state == SmsMessageState.Sent) {
-      } else if (state == SmsMessageState.Fail) {
-      }
-    });
-    sender.sendSms(message);
+      SmsSender sender = new SmsSender();
+      SmsMessage message = new SmsMessage(_receiver, _message);
+      message.onStateChanged.listen((state) {
+        if (state == SmsMessageState.Sent) {
+          showShortToast("Gửi lệnh thành công");
+        } else if (state == SmsMessageState.Fail) {
+          showShortToast("Gửi lệnh thất bại");
+        }
+      });
+      sender.sendSms(message);
 
-    Future.delayed(Duration(milliseconds: 300), () {
-      print("Message will send $message");
       setState(() {
         isLoading = false;
       });
-    });
+    } catch (err) {
+      showShortToast("Không thể gửi lệnh");
+    }
   }
 
   _deviceSendSMS(DeviceType device) async {
@@ -88,8 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
         "${device.name}${device.isOn ? 'B' : 'T'}${device.isDelay ? '.${device.delayTime}' : ''}";
     print("Message $_messageContent => Receiver:$_receiver");
 
-//    _sendSMS(_messageContent);
-
+    _sendSMS(_messageContent);
   }
 
   _getNumber() async {
@@ -122,11 +124,16 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: customAppBarHome(_title),
-      body: SingleChildScrollView(
-        child: Container(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          color: Colors.black,
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(
+            color: Colors.black,
+            image: DecorationImage(
+              image: new ExactAssetImage(brAsset),
+              fit: BoxFit.cover,
+            )),
+        child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
               /// Title
@@ -258,7 +265,75 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ],
                   ),
-                )
+                ),
+
+              /// View button
+              Container(
+                margin:
+                    EdgeInsets.only(top: 20, bottom: 20, left: 30, right: 30),
+                child: Row(
+                  children: <Widget>[
+                    /// Button check status
+                    Expanded(
+                      flex: 1,
+                      child: Container(
+                        padding: EdgeInsets.all(10),
+                        margin: EdgeInsets.only(right: 20),
+                        decoration: BoxDecoration(
+                            color: Colors.amber,
+                            borderRadius: BorderRadius.circular(5)),
+                        child: FlatButton(
+                          padding: EdgeInsets.all(0),
+                          onPressed: () {
+                            _sendSMS("KT");
+                          },
+                          child: Text(
+                            "Check Status",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 17,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    /// Button check account
+                    Expanded(
+                      flex: 1,
+                      child: Container(
+                        padding: EdgeInsets.all(10),
+                        margin: EdgeInsets.only(left: 20),
+                        decoration: BoxDecoration(
+                            color: Colors.amber,
+                            borderRadius: BorderRadius.circular(5)),
+                        child: FlatButton(
+                          padding: EdgeInsets.all(0),
+                          onPressed: () {
+                            _sendSMS("KTTK");
+                          },
+                          child: Text(
+                            "Check Account",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 17,
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+
+              /// Logo
+              Container(
+                width: 300,
+                margin: EdgeInsets.only(top: 10, bottom: 10),
+                child: Image.asset(logoAsset, fit: BoxFit.fitWidth),
+              ),
             ],
           ),
         ),

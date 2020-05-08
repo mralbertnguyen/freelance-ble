@@ -4,7 +4,6 @@ import 'dart:async';
 const String KEY_PHONE = "key_phone";
 
 class LoginScreen extends StatefulWidget {
-
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -25,18 +24,15 @@ class _LoginScreenState extends State<LoginScreen> {
               _passController.value.text == "quangthu") ||
           (_phoneNumberController.value.text == "0869209755" &&
               _passController.value.text == "admin")) {
-
         setState(() {
           isLoginFailed = false;
         });
 
-
+        showShortToast("Đăng nhập thành công");
         // Storage phone number to send sms
         prefs.setString(KEY_PHONE, _phoneNumberController.value.text);
 
-        Future.delayed(Duration(milliseconds: 3000), () {
-          Navigator.pushReplacementNamed(context, "/home");
-        });
+        Navigator.pushReplacementNamed(context, "/home");
       } else {
         setState(() {
           isLoginFailed = true;
@@ -203,4 +199,16 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
+}
+
+void showShortToast(String msg) {
+  Fluttertoast.showToast(
+      msg: msg, toastLength: Toast.LENGTH_SHORT, timeInSecForIosWeb: 1);
+}
+
+void showLongToast(String msg) {
+  Fluttertoast.showToast(
+    msg: msg,
+    toastLength: Toast.LENGTH_LONG,
+  );
 }
