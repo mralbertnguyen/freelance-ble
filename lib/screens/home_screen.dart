@@ -23,24 +23,28 @@ class _HomeScreenState extends State<HomeScreen> {
     {
       "name": "1",
       "is_on": false,
+      "is_delay": false,
       "delay_time": 0,
       "text_controller": _device1TextController
     },
     {
       "name": "2",
       "is_on": false,
+      "is_delay": false,
       "delay_time": 0,
       "text_controller": _device2TextController
     },
     {
       "name": "3",
       "is_on": false,
+      "is_delay": false,
       "delay_time": 0,
       "text_controller": _device3TextController
     },
     {
       "name": "4",
       "is_on": false,
+      "is_delay": false,
       "delay_time": 0,
       "text_controller": _device4TextController
     }
@@ -77,45 +81,58 @@ class _HomeScreenState extends State<HomeScreen> {
           width: MediaQuery.of(context).size.width,
           child: Column(
             children: <Widget>[
-              Row(
-                children: <Widget>[
-                  // TODO: Device name
-                  Text(
-                    "Thiết bị ${_deviceTest.name}: ",
-                    style: TextStyle(
-                        color: Colors.red,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20),
-                  ),
-                  // TODO: Button on off
-                  Switch(
-                    value: _deviceTest.isOn,
-                    onChanged: (value) {
-                      setState(() {
-                        _deviceTest.isOn = value;
-                        print("Device is on ${_deviceTest.isOn}");
-                      });
-                    },
-                    inactiveThumbColor: Colors.red,
-                    activeTrackColor: Colors.lightGreenAccent,
-                    activeColor: Colors.green,
-                  ),
-                  // TODO: Input delay time
-//                  TextField(
-//                    controller: _device1TextController,
-//                    onChanged: (v) {},
-//                  ),
-                  // TODO: Checkbox enable delay time
-                  Checkbox(
-                    value: _deviceTest.isOn,
-                    onChanged: (isChecked) {
-                      setState(() {
-                        _deviceTest.isOn = isChecked;
-                      });
-                    },
-                  )
-                ],
-              )
+              for (DeviceType device in listDevices)
+                Row(
+                  children: <Widget>[
+                    // TODO: Device name
+                    Text(
+                      "Thiết bị ${device.name}: ",
+                      style: TextStyle(
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20),
+                    ),
+                    // TODO: Button on off
+                    Switch(
+                      value: device.isOn,
+                      onChanged: (value) {
+                        setState(() {
+                          device.isOn = value;
+                          print("Device is on ${device.isOn}");
+                        });
+                      },
+                      inactiveThumbColor: Colors.red,
+                      activeTrackColor: Colors.lightGreenAccent,
+                      activeColor: Colors.green,
+                    ),
+
+                    // TODO: Checkbox enable delay time
+                    Checkbox(
+                      value: device.isDelay,
+                      onChanged: (isChecked) {
+                        setState(() {
+                          device.isDelay = isChecked;
+                        });
+                      },
+                    ),
+
+                    // TODO: Input delay time
+                    if (device.isDelay)
+                      Container(
+                        height: 50,
+                        width: 100,
+                        child: TextField(
+                          controller: _device1TextController,
+                          decoration: InputDecoration(),
+                          onChanged: (v) {
+                            setState(() {
+                              device.delayTime = int.parse(v);
+                            });
+                          },
+                        ),
+                      ),
+                  ],
+                )
             ],
           ),
         ),
