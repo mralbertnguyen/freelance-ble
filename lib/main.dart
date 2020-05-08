@@ -11,6 +11,8 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        unselectedWidgetColor: Colors.white
+
       ),
       home: MyHomePage(title: 'Flutter Demo Home Page'),
       debugShowCheckedModeBanner: false,
@@ -30,6 +32,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    return HomeScreen();
+    return LoginScreen();
   }
 }
