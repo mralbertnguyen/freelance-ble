@@ -75,7 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void dispose() {
-
+    initDeviceData.clear();
     _device1TextController.dispose();
     _device2TextController.dispose();
     _device3TextController.dispose();

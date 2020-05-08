@@ -13,6 +13,7 @@ export "package:the_third/widgets/app_bar_widget.dart";
 /// Styles
 export "package:the_third/styles/app_bar_style.dart";
 export "package:the_third/styles/hex_color.dart";
+export "package:the_third/styles/colors.dart";
 
 /// Models
 export "package:the_third/models/device_data_type_model.dart";

@@ -10,19 +10,19 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-        unselectedWidgetColor: Colors.white
-
-      ),
+          primarySwatch: Colors.blue, unselectedWidgetColor: Colors.white),
       home: MyHomePage(title: 'Flutter Demo Home Page'),
       debugShowCheckedModeBanner: false,
+      routes: {
+        "/home": (_) => new HomeScreen(),
+      },
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
- 
+
   final String title;
 
   @override
