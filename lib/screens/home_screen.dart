@@ -88,7 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   _deviceSendSMS(DeviceType device) async {
     String _messageContent =
-        "${device.name}${device.isOn ? 'B' : 'T'}${device.isDelay ? '.${device.delayTime}' : ''}";
+        "${device.name}${device.isOn ? 'B' : 'T'}${(device.isDelay && device.isOn) ? '.${device.delayTime}' : ''}";
     print("Message $_messageContent => Receiver:$_receiver");
 
     _sendSMS(_messageContent);
@@ -140,13 +140,10 @@ class _HomeScreenState extends State<HomeScreen> {
               Container(
                 margin:
                     EdgeInsets.only(top: 20, bottom: 20, left: 30, right: 30),
-                child: Text(
-                  "AT04 - GSM CONTROLLER",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 23,
-                      fontWeight: FontWeight.bold),
+                child:  Container(
+                  width: 300,
+                  margin: EdgeInsets.only(top: 10, bottom: 10),
+                  child: Image.asset(logo1Asset, fit: BoxFit.fitWidth),
                 ),
               ),
 
@@ -288,11 +285,11 @@ class _HomeScreenState extends State<HomeScreen> {
                             _sendSMS("KT");
                           },
                           child: Text(
-                            "Check Status",
+                            "Kiểm tra trạng thái",
                             style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.bold,
-                              fontSize: 17,
+                              fontSize: 12,
                             ),
                           ),
                         ),
@@ -314,11 +311,11 @@ class _HomeScreenState extends State<HomeScreen> {
                             _sendSMS("KTTK");
                           },
                           child: Text(
-                            "Check Account",
+                            "Kiểm tra tài khoản",
                             style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.bold,
-                              fontSize: 17,
+                              fontSize: 12,
                             ),
                           ),
                         ),
@@ -332,7 +329,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Container(
                 width: 300,
                 margin: EdgeInsets.only(top: 10, bottom: 10),
-                child: Image.asset(logoAsset, fit: BoxFit.fitWidth),
+                child: Image.asset(logo2Asset, fit: BoxFit.fitWidth),
               ),
             ],
           ),

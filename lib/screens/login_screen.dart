@@ -21,7 +21,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if (_formKey.currentState.validate()) {
       if ((_phoneNumberController.value.text == "0983383283" &&
-              _passController.value.text == "quangthu") ||
+              _passController.value.text == "atme.vn") ||
           (_phoneNumberController.value.text == "0869209755" &&
               _passController.value.text == "admin")) {
         setState(() {
