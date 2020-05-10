@@ -20,18 +20,13 @@ class _LoginScreenState extends State<LoginScreen> {
     SharedPreferences prefs = await _prefs;
 
     if (_formKey.currentState.validate()) {
-      if ((_phoneNumberController.value.text == "0983383283" &&
-              _passController.value.text == "atme.vn") ||
-          (_phoneNumberController.value.text == "0869209755" &&
-              _passController.value.text == "admin")) {
+      if ((_passController.value.text == "atme.vn")) {
         setState(() {
           isLoginFailed = false;
         });
-
-        showShortToast("Đăng nhập thành công");
         // Storage phone number to send sms
         prefs.setString(KEY_PHONE, _phoneNumberController.value.text);
-
+        showShortToast("Đăng nhập thành công");
         Navigator.pushReplacementNamed(context, "/home");
       } else {
         setState(() {
