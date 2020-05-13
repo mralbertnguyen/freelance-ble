@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "340768342409",
+    "firebase_url": "https://the-third-8acc9.firebaseio.com",
+    "project_id": "the-third-8acc9",
+    "storage_bucket": "the-third-8acc9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:340768342409:android:c98878504901f30ec6a158",
+        "android_client_info": {
+          "package_name": "com.example.the_third"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "340768342409-0e692c5gf0e903pve5aa1vv95fb1k2ij.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCi6smfo79oVGlmWejkxgraULWqWOuD-2k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "340768342409-0e692c5gf0e903pve5aa1vv95fb1k2ij.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

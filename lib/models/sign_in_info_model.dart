@@ -1,0 +1,3 @@
+class SignInInfoType{
+  String phoneNumber;
+}
