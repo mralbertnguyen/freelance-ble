@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:the_third/index.dart';
 
 void main() => runApp(MyApp());
@@ -32,7 +31,24 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    return LoginScreen();
+    return BlocProvider(
+      create: (context) => AuthBloc(),
+      child: BlocBuilder<AuthBloc, AuthState>(
+        // ignore: missing_return
+        builder: (context, state) {
+          if (state is AuthUnAuthenticate) {
+            return LoginScreen();
+          }
+
+          if (state is AuthInitial) {
+            return LoginScreen();
+          }
+
+          if (state is AuthAuthenticated) {
+            return HomeScreen();
+          }
+        },
+      ),
+    );
   }
 }
-

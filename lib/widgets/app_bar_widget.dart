@@ -1,5 +1,27 @@
 import 'package:the_third/index.dart';
 
+
+final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
+Widget customAppBarBack(String title) {
+  return AppBar(
+      backgroundColor: Colors.white,
+      bottomOpacity: 0.0,
+      elevation: 0.0,
+      centerTitle: true,
+      leading: Builder(
+        builder: (BuildContext context) {
+          return customIconBackHasBr(context);
+        },
+      ),
+      title: Text(
+        title,
+        style: TextStyle(color: Colors.black),
+      ),
+      actions: null);
+}
+
+
 Widget customAppBarHome(String _title) {
   return AppBar(
       backgroundColor: Colors.black,
