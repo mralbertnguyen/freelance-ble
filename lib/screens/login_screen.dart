@@ -1,7 +1,9 @@
 import 'package:the_third/index.dart';
+import 'package:the_third/screens/verify_screen.dart';
 
-const String KEY_PHONE = "key_phone";
-const String KEY_UUID = "uuid";
+
+final FirebaseAuth _auth = FirebaseAuth.instance;
+final GoogleSignIn _googleSignIn = GoogleSignIn();
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -11,95 +13,12 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
 
-  Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-
-  bool isLoginFailed = false;
-  bool isLoading = false;
-
-  String _smsVerificationCode = "";
-
   TextEditingController _phoneNumberController = new TextEditingController();
-  TextEditingController _passController = new TextEditingController();
 
-  _login(BuildContext context) async {
-    if (_formKey.currentState.validate()) {
-      _verifyPhoneNumber(context);
-    }
-//      if ((_passController.value.text == "atme.vn")) {
-//        setState(() {
-//          isLoginFailed = false;
-//        });
-//        // Storage phone number to send sms
-//        prefs.setString(KEY_PHONE, _phoneNumberController.value.text);
-//        showShortToast("Đăng nhập thành công");
-//        Navigator.pushReplacementNamed(context, "/home");
-//      } else {
-//        setState(() {
-//          isLoginFailed = true;
-//        });
-//      }
-//    }
-  }
-
-  _verifyPhoneNumber(BuildContext context) async {
-    String phoneNumber = "+84" + _phoneNumberController.value.text;
-    final FirebaseAuth _auth = FirebaseAuth.instance;
-    await _auth.verifyPhoneNumber(
-        phoneNumber: phoneNumber,
-        timeout: Duration(seconds: 5),
-        verificationCompleted: (authCredential) =>
-            _verificationComplete(authCredential, context),
-        verificationFailed: (authException) =>
-            _verificationFailed(authException, context),
-        codeAutoRetrievalTimeout: (verificationId) =>
-            _codeAutoRetrievalTimeout(verificationId),
-        // called when the SMS code is sent
-        codeSent: (verificationId, [code]) =>
-            _smsCodeSent(verificationId, [code]));
-  }
-
-  // will get an AuthCredential object that will help with logging into Firebase.
-  _verificationComplete(
-      AuthCredential authCredential, BuildContext context) async {
-    SharedPreferences prefs = await _prefs;
-
-    FirebaseAuth.instance
-        .signInWithCredential(authCredential)
-        .then((authResult) {
-      final snackBar =
-          SnackBar(content: Text("Success!!! UUID is: " + authResult.user.uid));
-      Scaffold.of(context).showSnackBar(snackBar);
-
-      setState(() {
-        isLoginFailed = false;
-      });
-
-//      prefs.setString(KEY_PHONE, _phoneNumberController.value.text);
-//      prefs.setString(KEY_UUID, authResult.user.uid);
-//
-//      Navigator.pushReplacementNamed(context, "/home");
-    });
-  }
-
-  _smsCodeSent(String verificationId, List<int> code) {
-    // set the verification code so that we can use it to log the user in
-    _smsVerificationCode = verificationId;
-  }
-
-  _verificationFailed(AuthException authException, BuildContext context) {
-//    final snackBar = SnackBar(
-//        content:
-//            Text("Exception!! message:" + authException.message.toString()));
-//    Scaffold.of(context).showSnackBar(snackBar);
-
-    setState(() {
-      isLoginFailed = true;
-    });
-  }
-
-  _codeAutoRetrievalTimeout(String verificationId) {
-    // set the verification code so that we can use it to log the user in
-    _smsVerificationCode = verificationId;
+  @override
+  void dispose() {
+    _phoneNumberController.dispose();
+    super.dispose();
   }
 
   @override
@@ -175,55 +94,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                     },
                                   ),
                                 ),
-//
-//                                /// Input password
-//                                Container(
-//                                  margin: EdgeInsets.only(top: 10, bottom: 20),
-//                                  child: TextFormField(
-//                                    controller: _passController,
-//                                    cursorColor: Colors.amber,
-//                                    obscureText: true,
-//                                    style: TextStyle(
-//                                        fontSize: 16,
-//                                        fontWeight: FontWeight.bold),
-//                                    decoration: InputDecoration(
-//                                      labelText: "Mật khẩu",
-//                                      fillColor: Colors.white,
-//                                      labelStyle:
-//                                          TextStyle(color: Colors.black),
-//                                      focusedBorder: const OutlineInputBorder(
-//                                          borderSide: const BorderSide(
-//                                              color: Colors.amber, width: 3)),
-//                                      disabledBorder: const OutlineInputBorder(
-//                                        borderSide: const BorderSide(
-//                                            color: Colors.grey, width: 2),
-//                                      ),
-//                                      enabledBorder: const OutlineInputBorder(
-//                                        borderSide: const BorderSide(
-//                                            color: Colors.amber, width: 2),
-//                                      ),
-//                                      border: OutlineInputBorder(
-//                                        borderSide:
-//                                            new BorderSide(color: Colors.white),
-//                                      ),
-//                                      focusColor: Colors.black,
-//                                    ),
-//                                    validator: (value) {
-//                                      if (value.isEmpty) {
-//                                        return 'Vui lòng kiểm tra mật khẩu ';
-//                                      }
-//                                      return null;
-//                                    },
-//                                  ),
-//                                ),
-
-                                /// Text error
-                                if (isLoginFailed)
-                                  Text("Thông tin đăng nhập không chính xác",
-                                      style: TextStyle(
-                                          color: Colors.red,
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold)),
 
                                 /// Button submit
                                 Row(
@@ -240,7 +110,17 @@ class _LoginScreenState extends State<LoginScreen> {
                                         child: FlatButton(
                                           padding: EdgeInsets.all(0),
                                           onPressed: () {
-                                            _login(context);
+//                                            _login(context);
+                                            // Push phone number to verify screen
+                                            if (_formKey.currentState
+                                                .validate()) {
+                                              String _phoneNo =
+                                                  "+84${_phoneNumberController.value.text.substring(1)}";
+                                              pushWithWidget(
+                                                  context,
+                                                  VerifyScreen(
+                                                      phoneNumber: _phoneNo));
+                                            }
                                           },
                                           child: Text(
                                             "ĐĂNG NHẬP",
@@ -263,7 +143,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                 ),
-                if (isLoading) LoadingScreen()
               ],
             ),
           );

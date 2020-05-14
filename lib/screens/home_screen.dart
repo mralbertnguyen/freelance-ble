@@ -1,6 +1,7 @@
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sms/sms.dart';
 import 'package:the_third/index.dart';
+import 'package:the_third/screens/verify_screen.dart';
 
 //import 'package:flutter_sms/flutter_sms.dart';
 
@@ -17,6 +18,8 @@ class _HomeScreenState extends State<HomeScreen> {
   bool isLoading = false;
 
   String _receiver = "";
+
+  SignInInfoType info;
 
   static TextEditingController _device1TextController =
       new TextEditingController();
@@ -63,12 +66,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _sendSMS(String _message) async {
     try {
+
+      String _phoneNo = info.phoneNumber;
+
       setState(() {
         isLoading = true;
       });
 
       SmsSender sender = new SmsSender();
-      SmsMessage message = new SmsMessage(_receiver, _message);
+      SmsMessage message = new SmsMessage(_phoneNo, _message);
       message.onStateChanged.listen((state) {
         if (state == SmsMessageState.Sent) {
           showShortToast("Gửi lệnh thành công");
@@ -89,7 +95,7 @@ class _HomeScreenState extends State<HomeScreen> {
   _deviceSendSMS(DeviceType device) async {
     String _messageContent =
         "${device.name}${device.isOn ? 'B' : 'T'}${(device.isDelay && device.isOn) ? '.${device.delayTime}' : ''}";
-    print("Message $_messageContent => Receiver:$_receiver");
+    print("Message $_messageContent => Receiver:${info.phoneNumber}");
 
     _sendSMS(_messageContent);
   }
@@ -97,7 +103,8 @@ class _HomeScreenState extends State<HomeScreen> {
   _getNumber() async {
     final SharedPreferences prefs = await _prefs;
     setState(() {
-      _receiver = prefs.getString(KEY_PHONE);
+      _receiver = prefs.getString(KEY_INFO);
+      info = SignInInfoType.fromJson(json.decode(_receiver));
     });
   }
 
@@ -111,6 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void dispose() {
     initDeviceData.clear();
+
     _device1TextController.dispose();
     _device2TextController.dispose();
     _device3TextController.dispose();
@@ -140,7 +148,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Container(
                 margin:
                     EdgeInsets.only(top: 20, bottom: 20, left: 30, right: 30),
-                child:  Container(
+                child: Container(
                   width: 300,
                   margin: EdgeInsets.only(top: 10, bottom: 10),
                   child: Image.asset(logo1Asset, fit: BoxFit.fitWidth),

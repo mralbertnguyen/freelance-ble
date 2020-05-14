@@ -8,6 +8,21 @@ abstract class AuthEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class UserSignInSuccess extends AuthEvent {
+  @override
+  List<Object> get props => [];
+
+  @override
+  String toString() => "AuthEvent => UserSignInSuccess";
+}
+class UserSignOut extends AuthEvent {
+  @override
+  List<Object> get props => [];
+
+  @override
+  String toString() => "AuthEvent => UserSignOut";
+}
+
 class LoginWithPhoneEvent extends AuthEvent {
   final String phoneNumber;
 

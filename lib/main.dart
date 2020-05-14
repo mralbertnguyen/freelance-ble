@@ -14,6 +14,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       routes: {
         "/home": (_) => new HomeScreen(),
+        "/verify": (_) => new HomeScreen(),
       },
     );
   }
@@ -36,12 +37,12 @@ class _MyHomePageState extends State<MyHomePage> {
       child: BlocBuilder<AuthBloc, AuthState>(
         // ignore: missing_return
         builder: (context, state) {
-          if (state is AuthUnAuthenticate) {
-            return LoginScreen();
+          if (state is AuthInitial) {
+            return SplashScreen();
           }
 
-          if (state is AuthInitial) {
-            return LoginScreen();
+          if (state is AuthUnAuthenticate) {
+            return SplashScreen();
           }
 
           if (state is AuthAuthenticated) {

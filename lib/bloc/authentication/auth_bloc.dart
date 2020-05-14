@@ -9,10 +9,20 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   @override
   Stream<AuthState> mapEventToState(event) async* {
     // TODO: implement mapEventToState
-    if (event is LoginWithPhoneEvent) {
-      try{
+    if (event is UserSignInSuccess) {
+      yield AuthLoading();
+      try {
+        yield AuthAuthenticated();
+      } catch (err) {
+        yield AuthFailed(err: err.toString());
+      }
+    }
 
-      }catch(err){
+    if (event is UserSignOut) {
+      yield AuthLoading();
+      try {
+        yield AuthUnAuthenticate();
+      } catch (err) {
         yield AuthFailed(err: err.toString());
       }
     }

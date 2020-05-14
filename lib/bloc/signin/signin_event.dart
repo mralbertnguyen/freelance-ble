@@ -16,3 +16,17 @@ class UserSignInEvent extends SignInEvent {
     return "SignInEvent => UserSignInEvent";
   }
 }
+
+class UserStorageInfoSignIn extends SignInEvent {
+  UserStorageInfoSignIn({@required this.info}) : assert(info != null);
+  final SignInInfoType info;
+
+  @override
+  List<Object> get props => [info];
+
+  @override
+  String toString() {
+    // TODO: implement toString
+    return "SignInEvent => UserStorageInfoSignIn";
+  }
+}

@@ -14,7 +14,14 @@ class AuthLoading extends AuthState {}
 
 class AuthUnAuthenticate extends AuthState {}
 
-class AuthAuthenticated extends AuthState {}
+class AuthAuthenticated extends AuthState {
+  @override
+  String toString() {
+    // TODO: implement toString
+    return "AuthState => AuthAuthenticated";
+  }
+
+}
 
 class AuthFailed extends AuthState {
   final String err;
