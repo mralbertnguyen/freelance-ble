@@ -34,12 +34,14 @@ class _GroupInputTextState extends State<GroupInputText> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 100,
+      margin: EdgeInsets.only(left: 20, right: 20),
       alignment: Alignment.center,
-      child: inputCode(controller, pinLength, hasError, (value) {
-      }, (result) {
-        submitVerifyCode(result);
-      }),
+      child: Center(
+        child: inputCode(controller, pinLength, hasError, (value) {
+        }, (result) {
+          submitVerifyCode(result);
+        }),
+      ),
     );
   }
 
@@ -101,27 +103,27 @@ Widget inputCode(TextEditingController controller, int pinLength, bool hasError,
   return PinCodeTextField(
     autofocus: true,
     controller: controller,
-    pinBoxHeight: 40.0,
-    pinBoxWidth: 30.0,
+    pinBoxHeight: 70.0,
+    pinBoxWidth: 50.0,
     hideCharacter: false,
     highlight: true,
     highlightColor: mainColor,
-    defaultBorderColor: Colors.black,
-    hasTextBorderColor: Colors.black,
+    defaultBorderColor: Colors.grey[100],
+    hasTextBorderColor: Colors.amber,
     maxLength: pinLength,
     hasError: hasError,
     maskCharacter: "😎",
     onTextChanged: onTextChanged,
     onDone: onDone,
-    wrapAlignment: WrapAlignment.spaceAround,
+    wrapAlignment: WrapAlignment.center,
     pinBoxDecoration: ProvidedPinBoxDecoration.defaultPinBoxDecoration,
     pinTextStyle: TextStyle(
       color:Colors.black,
-      fontSize: 30,
+      fontSize: 24,
     ),
     pinTextAnimatedSwitcherTransition:
     ProvidedPinBoxTextAnimation.scalingTransition,
-//                    pinBoxColor: Colors.green[100],
+                    pinBoxColor: Colors.white,
     pinTextAnimatedSwitcherDuration: Duration(milliseconds: 300),
 //                    highlightAnimation: true,
     highlightAnimationBeginColor: Colors.black,

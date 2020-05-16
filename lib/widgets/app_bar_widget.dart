@@ -7,7 +7,6 @@ Widget customAppBarBack(String title) {
   return AppBar(
       backgroundColor: Colors.white,
       bottomOpacity: 0.0,
-      elevation: 0.0,
       centerTitle: true,
       leading: Builder(
         builder: (BuildContext context) {

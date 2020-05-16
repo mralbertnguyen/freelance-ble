@@ -9,7 +9,7 @@ class _SplashScreenState extends State<SplashScreen> {
   _moveToLogin() async {
     Future.delayed(Duration(milliseconds: 1000), () {
       Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (BuildContext context) => LoginScreen()));
+          MaterialPageRoute(builder: (BuildContext context) => SignInScreen()));
     });
   }
 
@@ -23,6 +23,8 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar:null
+      ,
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,

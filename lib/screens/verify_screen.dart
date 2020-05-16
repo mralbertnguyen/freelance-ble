@@ -1,5 +1,6 @@
 import 'package:the_third/index.dart';
 import 'package:the_third/main.dart';
+import 'package:the_third/screens/create_password_screen.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final GoogleSignIn _googleSignIn = GoogleSignIn();
@@ -28,17 +29,17 @@ class _VerifyScreenState extends State<VerifyScreen> {
     final PhoneVerificationCompleted verificationCompleted =
         (AuthCredential phoneAuthCredential) {
       _auth.signInWithCredential(phoneAuthCredential);
+      print('Received phone auth credential: $phoneAuthCredential');
       setState(() {
-        print('Received phone auth credential: $phoneAuthCredential');
         _message = 'Vui lòng kiểm tra lại mã OTP';
       });
     };
 
     final PhoneVerificationFailed verificationFailed =
         (AuthException authException) {
+          print(
+              'Phone number verification failed. Code: ${authException.code}. Message: ${authException.message}');
       setState(() {
-        print(
-            'Phone number verification failed. Code: ${authException.code}. Message: ${authException.message}');
         _message = 'Vui lòng kiểm tra lại mã OTP';
       });
     };
@@ -73,13 +74,17 @@ class _VerifyScreenState extends State<VerifyScreen> {
       smsCode: _otp,
     );
     final FirebaseUser user =
-        (await _auth.signInWithCredential(credential)).user;
+        (await _auth.signInWithCredential(credential).catchError((e)=>{
+          _message = "${e.toString()}"
+
+        })).user;
     final FirebaseUser currentUser = await _auth.currentUser();
     assert(user.uid == currentUser.uid);
     setState(() {
       if (user != null) {
-        _message = 'Successfully signed in, uid: ' + user.uid;
+//        _message = 'Successfully signed in, uid: ' + user.uid;
 
+      print('Successfully signed in, uid: ' + user.uid);
         info = SignInInfoType.fromJson({
           "phone_number": widget.phoneNumber,
           "last_otp": _otp,
@@ -91,7 +96,9 @@ class _VerifyScreenState extends State<VerifyScreen> {
 
         _signInBloc.add(UserStorageInfoSignIn(info: info));
       } else {
-        _message = 'Sign in failed';
+       setState(() {
+         _message = 'Vui lòng kiểm tra lại mã OTP';
+       });
       }
     });
   }
@@ -125,9 +132,11 @@ class _VerifyScreenState extends State<VerifyScreen> {
                 isLoading = false;
               });
               /// Push to home
-              Navigator.pushReplacementNamed(
+              Navigator.push(
                   context,
-                  '/home');
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => CreatePasswordScreen()
+                  ));
             }
 
             if(state is SignInFailed){
@@ -144,39 +153,32 @@ class _VerifyScreenState extends State<VerifyScreen> {
                   height: MediaQuery.of(context).size.height,
                   child: Column(
                     children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          left: 20.0,
-                          right: 20.0,
-                        ),
-                        child: Container(
-                          color: Colors.white,
-                          child: Column(
-                            children: <Widget>[
-                              codeSent(widget.phoneNumber),
-                              titleInputOTP(),
-                              GroupInputText(callBack: _signInWithPhoneNumber),
-
-                              /// Message error
-                              Row(
-                                children: <Widget>[
-                                  Wrap(
-                                    children: <Widget>[
-                                      Text(
-                                        _message,
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            color: Colors.red, fontSize: 15),
-                                      )
-                                    ],
-                                  )
-                                ],
-                              )
+                      Container(
+                        color: Colors.white,
+                        child: Column(
+                          children: <Widget>[
+                            codeSent(widget.phoneNumber),
+                            titleInputOTP(),
+                            GroupInputText(callBack: _signInWithPhoneNumber),
+                            /// Message error
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Flexible(
+                                  child:  Text(
+                                    _message,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Colors.red, fontSize: 15),
+                                  ),
+                                )
+                              ],
+                            )
 //                      CounterDownTimer(),
-                            ],
-                          ),
+                          ],
                         ),
-                      )
+                      ),
+
                     ],
                   ),
                 ),
@@ -204,16 +206,17 @@ class _VerifyScreenState extends State<VerifyScreen> {
 
   Widget codeSent(String phoneNumber) {
     return Container(
-      margin: new EdgeInsets.only(top: 25, bottom: 52),
+      margin: new EdgeInsets.only(top: 25, bottom: 25),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Text(
             "Mã được gửi tới: ",
-            style: TextStyle(fontSize: 18, color: mainColor),
+            style: TextStyle(fontSize: 18, ),
           ),
           Text(
             phoneNumber,
-            style: TextStyle(fontSize: 18),
+            style: TextStyle(fontSize: 18, color: mainColor, fontWeight: FontWeight.bold),
           )
         ],
       ),

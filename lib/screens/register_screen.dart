@@ -1,16 +1,16 @@
 import 'package:the_third/index.dart';
-import 'package:the_third/screens/verify_screen.dart';
+
+class RegisterScreen extends StatefulWidget {
+
+  final String title;
+  RegisterScreen({@required this.title}) : assert(title != null);
 
 
-final FirebaseAuth _auth = FirebaseAuth.instance;
-final GoogleSignIn _googleSignIn = GoogleSignIn();
-
-class LoginScreen extends StatefulWidget {
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  _RegisterScreenState createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
 
   TextEditingController _phoneNumberController = new TextEditingController();
@@ -24,7 +24,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: null,
+      appBar: customAppBarBack(widget.title),
       body: Builder(
         builder: (context) {
           return SingleChildScrollView(
@@ -38,11 +38,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Column(
                       children: <Widget>[
                         /// Logo
-                        Container(
-                          width: 300,
-                          margin: EdgeInsets.only(top: 100, bottom: 30),
-                          child: Image.asset(logoAsset, fit: BoxFit.fitWidth),
-                        ),
+                        Logo(300),
 
                         /// Login form
                         Container(
@@ -52,6 +48,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             key: _formKey,
                             child: Column(
                               children: <Widget>[
+                                Text("Vui lòng nhập số điện thoại của bạn "),
                                 /// Input Phone number
                                 Container(
                                   margin: EdgeInsets.only(top: 20, bottom: 10),
@@ -63,7 +60,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold),
                                     decoration: InputDecoration(
-                                      labelText: "Số điện thoại",
                                       fillColor: Colors.white,
                                       labelStyle:
                                           TextStyle(color: Colors.black),
@@ -104,7 +100,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                         padding: EdgeInsets.all(10),
                                         margin: EdgeInsets.only(top: 20),
                                         decoration: BoxDecoration(
-                                            color: Colors.amber,
+                                            color: Colors.amber.withOpacity(0.7),
+                                            border: Border.all(
+                                                color:  Colors.amber,
+                                                width: 1
+                                            ),
                                             borderRadius:
                                                 BorderRadius.circular(5)),
                                         child: FlatButton(
@@ -123,10 +123,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                             }
                                           },
                                           child: Text(
-                                            "ĐĂNG NHẬP",
+                                            "Nhận mã xác thực",
                                             style: TextStyle(
                                               color: Colors.black,
-                                              fontWeight: FontWeight.bold,
                                               fontSize: 20,
                                             ),
                                           ),

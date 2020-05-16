@@ -38,11 +38,11 @@ class _MyHomePageState extends State<MyHomePage> {
         // ignore: missing_return
         builder: (context, state) {
           if (state is AuthInitial) {
-            return SplashScreen();
+            return CreatePasswordScreen();
           }
 
           if (state is AuthUnAuthenticate) {
-            return SplashScreen();
+            return CreatePasswordScreen();
           }
 
           if (state is AuthAuthenticated) {

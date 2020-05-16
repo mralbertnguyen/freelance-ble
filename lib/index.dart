@@ -16,8 +16,11 @@ export 'package:firebase_auth/firebase_auth.dart';
 
 /// Screens
 export "package:the_third/screens/home_screen.dart";
-export 'package:the_third/screens/login_screen.dart';
+export 'package:the_third/screens/register_screen.dart';
 export 'package:the_third/screens/splash_screen.dart';
+export 'package:the_third/screens/verify_screen.dart';
+export 'package:the_third/screens/sign_in_screen.dart';
+export 'package:the_third/screens/create_password_screen.dart';
 
 /// Widgets
 export "package:the_third/widgets/app_bar_widget.dart";
@@ -25,6 +28,7 @@ export 'package:the_third/widgets/loading_widget.dart';
 export 'package:the_third/widgets/app_bar_widget.dart';
 export 'package:the_third/widgets/icon_back_widget.dart';
 export 'package:the_third/widgets/group_input_widget.dart';
+export 'package:the_third/widgets/logo_widget.dart';
 
 /// Styles
 export "package:the_third/styles/app_bar_style.dart";
