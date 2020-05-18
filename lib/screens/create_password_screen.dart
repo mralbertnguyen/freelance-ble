@@ -8,9 +8,34 @@ class CreatePasswordScreen extends StatefulWidget {
 
 class _CreatePasswordState extends State<CreatePasswordScreen> {
   final _formKey = GlobalKey<FormState>();
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+
+  SignInInfoType info;
 
   TextEditingController _passwordController = new TextEditingController();
   TextEditingController _reEnterPWController = new TextEditingController();
+
+  _createNewPassword() async {
+    /// Get shared preference
+    final SharedPreferences prefs = await _prefs;
+    SignInInfoType _info =
+        SignInInfoType.fromJson(json.decode(prefs.getString(KEY_INFO)));
+
+    if (_info != null) {
+      setState(() {
+        info = prefs.getString(KEY_INFO) as SignInInfoType;
+      });
+    } else {
+      showShortToast("Can not get info data");
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+//    _createNewPassword();
+  }
 
   @override
   void dispose() {
@@ -35,10 +60,14 @@ class _CreatePasswordState extends State<CreatePasswordScreen> {
                   Container(
                     margin: EdgeInsets.only(left: 30, right: 30),
                     padding: EdgeInsets.all(20),
-                    child: Text("Tạo mật khẩu mới cho tài khoản của bạn", style: TextStyle(
-                      color: Colors.grey,
-                    ),),
+                    child: Text(
+                      "Tạo mật khẩu mới cho tài khoản của bạn",
+                      style: TextStyle(
+                        color: Colors.grey,
+                      ),
+                    ),
                   ),
+
                   /// Login form
                   Container(
                     margin: EdgeInsets.only(left: 30, right: 30),
@@ -51,11 +80,11 @@ class _CreatePasswordState extends State<CreatePasswordScreen> {
                           CusInputWithLabel(
                             label: "Mật khẩu mới",
                             textEditingController: _passwordController,
+                            isSecure: true,
+                            keyboardType: TextInputType.visiblePassword,
                             onValidator: (value) {
-                              if (value.isEmpty ||
-                                  (value.length < 9 &&
-                                      value.length > 12)) {
-                                return 'Vui lòng kiểm tra số điện thoại';
+                              if ((value.length < 6)) {
+                                return 'Vui lòng nhập mật khẩu dài hơn 6 ký tự';
                               }
                               return null;
                             },
@@ -65,11 +94,15 @@ class _CreatePasswordState extends State<CreatePasswordScreen> {
                           CusInputWithLabel(
                             label: "Nhập lại mật khẩu",
                             textEditingController: _reEnterPWController,
+                            keyboardType: TextInputType.visiblePassword,
+                            isSecure: true,
                             onValidator: (value) {
-                              if (value.isEmpty ||
-                                  (value.length < 9 &&
-                                      value.length > 12)) {
-                                return 'Vui lòng kiểm tra mật khẩu';
+                              if ((value.length < 6)) {
+                                return 'Vui lòng nhập mật khẩu dài hơn 6 ký tự';
+                              }
+
+                              if (_passwordController.value.text != value) {
+                                return 'Mật khẩu không khớp, vui lòng kiểm tra lại';
                               }
                               return null;
                             },
@@ -92,8 +125,8 @@ class _CreatePasswordState extends State<CreatePasswordScreen> {
                             margin: EdgeInsets.only(top: 20),
                             decoration: BoxDecoration(
                                 color: Colors.amber.withOpacity(0.7),
-                                border: Border.all(
-                                    color: Colors.amber, width: 1),
+                                border:
+                                    Border.all(color: Colors.amber, width: 1),
                                 borderRadius: BorderRadius.circular(5)),
                             child: FlatButton(
                               padding: EdgeInsets.all(0),
@@ -109,7 +142,7 @@ class _CreatePasswordState extends State<CreatePasswordScreen> {
                                 }
                               },
                               child: Text(
-                                "Hoàn thành",
+                                "Tạo mật khẩu mới",
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 20,

@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       routes: {
         "/home": (_) => new HomeScreen(),
-        "/verify": (_) => new HomeScreen(),
+        "/verify": (_) => new VerifyScreen(phoneNumber: null),
       },
     );
   }

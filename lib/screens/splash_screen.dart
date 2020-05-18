@@ -13,6 +13,8 @@ class _SplashScreenState extends State<SplashScreen> {
     });
   }
 
+  _handleStartApp() {}
+
   @override
   void initState() {
     // TODO: implement initState
@@ -23,8 +25,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:null
-      ,
+      appBar: null,
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,

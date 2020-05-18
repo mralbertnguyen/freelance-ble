@@ -2,8 +2,8 @@ import 'package:pin_code_text_field/pin_code_text_field.dart';
 import 'package:the_third/index.dart';
 
 typedef ReturnCode(otp);
-class GroupInputText extends StatefulWidget {
 
+class GroupInputText extends StatefulWidget {
   final ReturnCode callBack;
   GroupInputText({@required this.callBack}) : assert(callBack != null);
   @override
@@ -20,7 +20,7 @@ class _GroupInputTextState extends State<GroupInputText> {
   bool hasError = false;
   String errorMessage;
 
-  submitVerifyCode(val){
+  submitVerifyCode(val) {
     widget.callBack(val);
   }
 
@@ -37,14 +37,12 @@ class _GroupInputTextState extends State<GroupInputText> {
       margin: EdgeInsets.only(left: 20, right: 20),
       alignment: Alignment.center,
       child: Center(
-        child: inputCode(controller, pinLength, hasError, (value) {
-        }, (result) {
+        child: inputCode(controller, pinLength, hasError, (value) {}, (result) {
           submitVerifyCode(result);
         }),
       ),
     );
   }
-
 
   Widget itemInputOTP(BuildContext context, TextEditingController txtController,
       FocusNode focusNode, FocusNode prevNode, FocusNode nextFocus) {
@@ -57,9 +55,7 @@ class _GroupInputTextState extends State<GroupInputText> {
         focusNode: focusNode,
         textAlign: TextAlign.center,
         style: TextStyle(
-            color: mainColor,
-            fontSize: 25,
-            fontWeight: FontWeight.bold),
+            color: mainColor, fontSize: 25, fontWeight: FontWeight.bold),
         enableInteractiveSelection: false,
         autofocus: prevNode == null ? true : false,
         onChanged: (String value) {
@@ -73,7 +69,7 @@ class _GroupInputTextState extends State<GroupInputText> {
           }
           // TODO: call api to submit and verify OTP code
 //        submitVerifyCode(context);
-        widget.callBack(value);
+          widget.callBack(value);
         },
         onFieldSubmitted: (String value) {
           FocusScope.of(context).requestFocus(nextFocus);
@@ -93,10 +89,7 @@ class _GroupInputTextState extends State<GroupInputText> {
       ),
     );
   }
-
-
 }
-
 
 Widget inputCode(TextEditingController controller, int pinLength, bool hasError,
     dynamic Function(String) onTextChanged, void Function(String) onDone) {
@@ -118,12 +111,12 @@ Widget inputCode(TextEditingController controller, int pinLength, bool hasError,
     wrapAlignment: WrapAlignment.center,
     pinBoxDecoration: ProvidedPinBoxDecoration.defaultPinBoxDecoration,
     pinTextStyle: TextStyle(
-      color:Colors.black,
+      color: Colors.black,
       fontSize: 24,
     ),
     pinTextAnimatedSwitcherTransition:
-    ProvidedPinBoxTextAnimation.scalingTransition,
-                    pinBoxColor: Colors.white,
+        ProvidedPinBoxTextAnimation.scalingTransition,
+    pinBoxColor: Colors.white,
     pinTextAnimatedSwitcherDuration: Duration(milliseconds: 300),
 //                    highlightAnimation: true,
     highlightAnimationBeginColor: Colors.black,

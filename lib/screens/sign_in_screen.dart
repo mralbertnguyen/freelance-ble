@@ -49,6 +49,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           CusInputWithLabel(
                             label: "Số điện thoại",
                             textEditingController: _phoneNumberController,
+                            keyboardType: TextInputType.number,
                             onValidator: (value) {
                               if (value.isEmpty ||
                                   (value.length < 9 &&
@@ -63,6 +64,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           CusInputWithLabel(
                             label: "Mật khẩu",
                             textEditingController: _passwordController,
+                            keyboardType: TextInputType.text,
                             onValidator: (value) {
                               if (value.isEmpty ||
                                   (value.length < 9 &&
