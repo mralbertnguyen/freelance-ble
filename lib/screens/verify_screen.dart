@@ -18,6 +18,7 @@ class _VerifyScreenState extends State<VerifyScreen> {
   String _message = '';
   String _verificationId;
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  final Storage _storage = new Storage();
 
   SignInInfoType info;
 
@@ -37,8 +38,8 @@ class _VerifyScreenState extends State<VerifyScreen> {
 
     final PhoneVerificationFailed verificationFailed =
         (AuthException authException) {
-          print(
-              'Phone number verification failed. Code: ${authException.code}. Message: ${authException.message}');
+      print(
+          'Phone number verification failed. Code: ${authException.code}. Message: ${authException.message}');
       setState(() {
         _message = 'Vui lòng kiểm tra lại mã OTP';
       });
@@ -66,39 +67,34 @@ class _VerifyScreenState extends State<VerifyScreen> {
 
   // Example code of how to sign in with phone.
   void _signInWithPhoneNumber(_otp) async {
-
     final SharedPreferences prefs = await _prefs;
 
     final AuthCredential credential = PhoneAuthProvider.getCredential(
       verificationId: _verificationId,
       smsCode: _otp,
     );
-    final FirebaseUser user =
-        (await _auth.signInWithCredential(credential).catchError((e)=>{
-          _message = "${e.toString()}"
 
-        })).user;
+    final FirebaseUser user = (await _auth
+            .signInWithCredential(credential)
+            .catchError((e) => {_message = "${e.toString()}"}))
+        .user;
     final FirebaseUser currentUser = await _auth.currentUser();
     assert(user.uid == currentUser.uid);
-    setState(() {
+    setState(() async {
       if (user != null) {
-//        _message = 'Successfully signed in, uid: ' + user.uid;
-
-      print('Successfully signed in, uid: ' + user.uid);
         info = SignInInfoType.fromJson({
           "phone_number": widget.phoneNumber,
           "last_otp": _otp,
           "verification_id": _verificationId,
           "uuid": user.uid,
         });
-
-        prefs.setString(KEY_INFO, json.encode(info));
+        await _storage.saveInfo(info);
 
         _signInBloc.add(UserStorageInfoSignIn(info: info));
       } else {
-       setState(() {
-         _message = 'Vui lòng kiểm tra lại mã OTP';
-       });
+        setState(() {
+          _message = 'Vui lòng kiểm tra lại mã OTP';
+        });
       }
     });
   }
@@ -120,8 +116,7 @@ class _VerifyScreenState extends State<VerifyScreen> {
         child: BlocListener<SignInBloc, SignInState>(
           bloc: _signInBloc,
           listener: (context, state) {
-
-            if(state is SignInLoading){
+            if (state is SignInLoading) {
               setState(() {
                 isLoading = true;
               });
@@ -131,15 +126,16 @@ class _VerifyScreenState extends State<VerifyScreen> {
               setState(() {
                 isLoading = false;
               });
+
               /// Push to home
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (BuildContext context) => CreatePasswordScreen()
-                  ));
+                      builder: (BuildContext context) =>
+                          CreatePasswordScreen()));
             }
 
-            if(state is SignInFailed){
+            if (state is SignInFailed) {
               setState(() {
                 isLoading = false;
               });
@@ -160,12 +156,13 @@ class _VerifyScreenState extends State<VerifyScreen> {
                             codeSent(widget.phoneNumber),
                             titleInputOTP(),
                             GroupInputText(callBack: _signInWithPhoneNumber),
+
                             /// Message error
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
                                 Flexible(
-                                  child:  Text(
+                                  child: Text(
                                     _message,
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
@@ -178,11 +175,10 @@ class _VerifyScreenState extends State<VerifyScreen> {
                           ],
                         ),
                       ),
-
                     ],
                   ),
                 ),
-                if(isLoading) LoadingScreen()
+                if (isLoading) LoadingScreen()
               ],
             ),
           ),
@@ -212,11 +208,14 @@ class _VerifyScreenState extends State<VerifyScreen> {
         children: <Widget>[
           Text(
             "Mã được gửi tới: ",
-            style: TextStyle(fontSize: 18, ),
+            style: TextStyle(
+              fontSize: 18,
+            ),
           ),
           Text(
             phoneNumber,
-            style: TextStyle(fontSize: 18, color: mainColor, fontWeight: FontWeight.bold),
+            style: TextStyle(
+                fontSize: 18, color: mainColor, fontWeight: FontWeight.bold),
           )
         ],
       ),

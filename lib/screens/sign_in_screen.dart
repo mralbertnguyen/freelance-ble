@@ -52,8 +52,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             keyboardType: TextInputType.number,
                             onValidator: (value) {
                               if (value.isEmpty ||
-                                  (value.length < 9 &&
-                                      value.length > 12)) {
+                                  (value.length < 9 && value.length > 12)) {
                                 return 'Vui lòng kiểm tra số điện thoại';
                               }
                               return null;
@@ -67,8 +66,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             keyboardType: TextInputType.text,
                             onValidator: (value) {
                               if (value.isEmpty ||
-                                  (value.length < 9 &&
-                                      value.length > 12)) {
+                                  (value.length < 9 && value.length > 12)) {
                                 return 'Vui lòng kiểm tra mật khẩu';
                               }
                               return null;
@@ -88,20 +86,30 @@ class _SignInScreenState extends State<SignInScreen> {
                         Container(
                           child: FlatButton(
                             onPressed: () {
-                              Navigator.push(context,
-                                  MaterialPageRoute(builder: (BuildContext context) => RegisterScreen(title: "Đặt lại mật khẩu")));
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          RegisterScreen(
+                                              title: "Đặt lại mật khẩu")));
                             },
-                            child: Text("Quên mật khẩu?", style:
-                            TextStyle(
-                                decoration: TextDecoration.underline
-                            ),),
+                            child: Text(
+                              "Quên mật khẩu?",
+                              style: TextStyle(
+                                  decoration: TextDecoration.underline),
+                            ),
                           ),
                         ),
                         Container(
                           child: FlatButton(
                             onPressed: () {
-                              Navigator.push(context,
-                                  MaterialPageRoute(builder: (BuildContext context) => RegisterScreen(title: "Đăng ký tài khoản",)));
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          RegisterScreen(
+                                            title: "Đăng ký tài khoản",
+                                          )));
                             },
                             child: Text("Đăng ký"),
                           ),
@@ -123,8 +131,8 @@ class _SignInScreenState extends State<SignInScreen> {
                             margin: EdgeInsets.only(top: 20),
                             decoration: BoxDecoration(
                                 color: Colors.amber.withOpacity(0.7),
-                                border: Border.all(
-                                    color: Colors.amber, width: 1),
+                                border:
+                                    Border.all(color: Colors.amber, width: 1),
                                 borderRadius: BorderRadius.circular(5)),
                             child: FlatButton(
                               padding: EdgeInsets.all(0),
@@ -133,10 +141,8 @@ class _SignInScreenState extends State<SignInScreen> {
                                 if (_formKey.currentState.validate()) {
                                   String _phoneNo =
                                       "+84${_phoneNumberController.value.text.substring(1)}";
-                                  pushWithWidget(
-                                      context,
-                                      VerifyScreen(
-                                          phoneNumber: _phoneNo));
+                                  pushWithWidget(context,
+                                      VerifyScreen(phoneNumber: _phoneNo));
                                 }
                               },
                               child: Text(

@@ -46,3 +46,5 @@ export 'package:the_third/bloc/index.dart';
 export "package:the_third/utils/sms_config.dart";
 export "package:the_third/utils/assets_export.dart";
 export "package:the_third/utils/navigator_script.dart";
+export "package:the_third/utils/main_script.dart";
+

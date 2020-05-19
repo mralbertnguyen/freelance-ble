@@ -72,14 +72,12 @@ class _CusInputWithLabelState extends State<CusInputWithLabel> {
                 focusColor: Colors.black,
                 suffixIcon: IconButton(
                   icon: Icon(
-                    // Based on passwordVisible state choose the icon
                     _isSecure ?? false
                         ? Icons.visibility
                         : Icons.visibility_off,
                     color: mainColor,
                   ),
                   onPressed: () {
-                    // Update the state i.e. toogle the state of passwordVisible variable
                     setState(() {
                       _isSecure = !_isSecure ?? false;
                     });

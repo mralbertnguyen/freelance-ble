@@ -9,6 +9,7 @@ class CreatePasswordScreen extends StatefulWidget {
 class _CreatePasswordState extends State<CreatePasswordScreen> {
   final _formKey = GlobalKey<FormState>();
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  final Storage _storage = new Storage();
 
   SignInInfoType info;
 
@@ -16,14 +17,27 @@ class _CreatePasswordState extends State<CreatePasswordScreen> {
   TextEditingController _reEnterPWController = new TextEditingController();
 
   _createNewPassword() async {
-    /// Get shared preference
-    final SharedPreferences prefs = await _prefs;
-    SignInInfoType _info =
-        SignInInfoType.fromJson(json.decode(prefs.getString(KEY_INFO)));
+    // Push phone number to verify screen
+    if (_formKey.currentState.validate()) {
+      if (_passwordController.value.text == _reEnterPWController.value.text) {
+        // Storage info
+        setState(() {
+          info.password = _passwordController.value.text;
+        });
 
+        await _storage.saveInfo(info);
+
+        showLongToast("Tạo mật khẩu mới thành công.");
+      }
+    }
+  }
+
+  _initValue() async {
+    /// Get shared preference
+    var _info = await _storage.getInfo();
     if (_info != null) {
       setState(() {
-        info = prefs.getString(KEY_INFO) as SignInInfoType;
+        info = _info;
       });
     } else {
       showShortToast("Can not get info data");
@@ -34,7 +48,7 @@ class _CreatePasswordState extends State<CreatePasswordScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-//    _createNewPassword();
+    _initValue();
   }
 
   @override
@@ -62,6 +76,17 @@ class _CreatePasswordState extends State<CreatePasswordScreen> {
                     padding: EdgeInsets.all(20),
                     child: Text(
                       "Tạo mật khẩu mới cho tài khoản của bạn",
+                      style: TextStyle(
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ),
+
+                  Container(
+                    margin: EdgeInsets.only(left: 30, right: 30),
+                    padding: EdgeInsets.all(20),
+                    child: Text(
+                      "Số điện thoại đăng ký: ${info.phoneNumber ?? "+84xxxxxxxxxx"}",
                       style: TextStyle(
                         color: Colors.grey,
                       ),
@@ -100,7 +125,6 @@ class _CreatePasswordState extends State<CreatePasswordScreen> {
                               if ((value.length < 6)) {
                                 return 'Vui lòng nhập mật khẩu dài hơn 6 ký tự';
                               }
-
                               if (_passwordController.value.text != value) {
                                 return 'Mật khẩu không khớp, vui lòng kiểm tra lại';
                               }
@@ -130,17 +154,7 @@ class _CreatePasswordState extends State<CreatePasswordScreen> {
                                 borderRadius: BorderRadius.circular(5)),
                             child: FlatButton(
                               padding: EdgeInsets.all(0),
-                              onPressed: () {
-                                // Push phone number to verify screen
-                                if (_formKey.currentState.validate()) {
-//                                  String _phoneNo =
-//                                      "${_.value.text.substring(1)}";
-//                                  pushWithWidget(
-//                                      context,
-//                                      VerifyScreen(
-//                                          phoneNumber: _phoneNo));
-                                }
-                              },
+                              onPressed: _createNewPassword,
                               child: Text(
                                 "Tạo mật khẩu mới",
                                 style: TextStyle(
