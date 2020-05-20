@@ -8,15 +8,61 @@ class SignInScreen extends StatefulWidget {
 
 class _SignInScreenState extends State<SignInScreen> {
   final _formKey = GlobalKey<FormState>();
+  final Storage _storage = new Storage();
+  final StringHandler _stringHandler = new StringHandler();
+
+  bool _isLoginFailed = false;
+  String _errorMsg = "";
 
   TextEditingController _phoneNumberController = new TextEditingController();
   TextEditingController _passwordController = new TextEditingController();
 
+  _submitFormLogin() async {
+    // Push phone number to verify screen
+    if (_formKey.currentState.validate()) {
+      var _phone = _phoneNumberController.value.text;
+      var _pass = _passwordController.value.text;
 
-  _submitFormLogin(){
+      SignInInfoType _storageInfo = await _storage.getInfo();
 
+      if (_storageInfo == null) {
+        setState(() {
+          _isLoginFailed = true;
+          _errorMsg = "Chưa đăng ký tài khoản trên thiết bị này";
+        });
+      } else {
+        String _finalPhoneNo = _stringHandler.handlePhoneNo(_phone);
+        print("Phone: $_finalPhoneNo === Password: $_pass}");
 
+        if (_storageInfo.phoneNumber != _finalPhoneNo ||
+            _storageInfo.password != _pass) {
+          setState(() {
+            _isLoginFailed = true;
+            _errorMsg = "Thông tin đăng nhập không chính xác";
+          });
+        }
+        if (_storageInfo.phoneNumber == _finalPhoneNo &&
+            _storageInfo.password == _pass) {
+          setState(() {
+            _isLoginFailed = false;
+            _errorMsg = "";
+          });
+          pushWithWidget(context,
+              HomeScreen());
+        }
 
+      }
+
+      /// Get user from storage
+      /// if has not => first time user install app on this device => required register new phone with OTP
+      /// user info existed => compare user name and password to login
+
+//      String _finalPhoneNo =
+//          "+84${_phoneNumberController.value.text.substring(1)}";
+//
+//
+
+    }
   }
 
   @override
@@ -71,7 +117,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             label: "Mật khẩu",
                             textEditingController: _passwordController,
                             keyboardType: TextInputType.text,
-                            isSecure :true,
+                            isSecure: true,
                             onValidator: (value) {
                               if (value.isEmpty ||
                                   (value.length < 9 && value.length > 12)) {
@@ -85,6 +131,18 @@ class _SignInScreenState extends State<SignInScreen> {
                     ),
                   ),
 
+                  /// Show error message
+                  if (_isLoginFailed)
+                    Container(
+                      child: Center(
+                        child: Text(
+                          _errorMsg,
+                          style: TextStyle(color: Colors.red, fontSize: 14),
+                        ),
+                      ),
+                    ),
+
+                  /// View show button forgot password and register
                   Container(
                     margin: EdgeInsets.only(left: 30, right: 30),
                     padding: EdgeInsets.only(left: 20, right: 20),
@@ -144,15 +202,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                 borderRadius: BorderRadius.circular(5)),
                             child: FlatButton(
                               padding: EdgeInsets.all(0),
-                              onPressed: () {
-                                // Push phone number to verify screen
-                                if (_formKey.currentState.validate()) {
-                                  String _phoneNo =
-                                      "+84${_phoneNumberController.value.text.substring(1)}";
-                                  pushWithWidget(context,
-                                      VerifyScreen(phoneNumber: _phoneNo));
-                                }
-                              },
+                              onPressed: _submitFormLogin,
                               child: Text(
                                 "Nhận mã xác thực",
                                 style: TextStyle(

@@ -2,6 +2,7 @@ import 'package:the_third/index.dart';
 
 class Storage {
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+
   Future<SignInInfoType> getInfo() async {
     SignInInfoType info;
     try {
@@ -12,8 +13,11 @@ class Storage {
       } else {
         showShortToast("Can not get info data");
       }
+
+      print("Storage => getInfo => Result => ${json.encode(info)}");
       return info;
     } catch (err) {
+      showShortToast("Error: ${err.toString()}");
       print("MainScript => getInfo => Err ${err.toString()} ");
       return null;
     }
@@ -29,5 +33,17 @@ class Storage {
     } catch (err) {
       return false;
     }
+  }
+}
+
+class StringHandler {
+  String handlePhoneNo(String input) {
+    String _result = input;
+
+    if (input.substring(0, 1) == "0") {
+      return "+84${_result.substring(1)}";
+    }
+
+    return "+84$_result";
   }
 }
