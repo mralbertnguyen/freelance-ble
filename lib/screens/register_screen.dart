@@ -38,7 +38,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     child: Column(
                       children: <Widget>[
                         /// Logo
-                        Logo(300),
+                        Container(
+                            margin: EdgeInsets.only(top: 30),
+                            child: Logo(300)),
 
                         /// Login form
                         Container(

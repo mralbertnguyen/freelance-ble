@@ -12,6 +12,13 @@ class _SignInScreenState extends State<SignInScreen> {
   TextEditingController _phoneNumberController = new TextEditingController();
   TextEditingController _passwordController = new TextEditingController();
 
+
+  _submitFormLogin(){
+
+
+
+  }
+
   @override
   void dispose() {
     _phoneNumberController.dispose();
@@ -64,6 +71,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             label: "Mật khẩu",
                             textEditingController: _passwordController,
                             keyboardType: TextInputType.text,
+                            isSecure :true,
                             onValidator: (value) {
                               if (value.isEmpty ||
                                   (value.length < 9 && value.length > 12)) {

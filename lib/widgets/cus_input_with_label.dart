@@ -70,7 +70,7 @@ class _CusInputWithLabelState extends State<CusInputWithLabel> {
                   borderSide: new BorderSide(color: Colors.red),
                 ),
                 focusColor: Colors.black,
-                suffixIcon: IconButton(
+                suffixIcon: this._isSecure ? IconButton(
                   icon: Icon(
                     _isSecure ?? false
                         ? Icons.visibility
@@ -82,7 +82,7 @@ class _CusInputWithLabelState extends State<CusInputWithLabel> {
                       _isSecure = !_isSecure ?? false;
                     });
                   },
-                ),
+                ) : null,
               ),
               validator: widget.onValidator,
             ),
