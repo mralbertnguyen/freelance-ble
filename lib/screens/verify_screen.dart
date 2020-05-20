@@ -68,6 +68,7 @@ class _VerifyScreenState extends State<VerifyScreen> {
   // Example code of how to sign in with phone.
   void _signInWithPhoneNumber(_otp) async {
     final SharedPreferences prefs = await _prefs;
+    final SignInInfoType _oldInfo = await _storage.getInfo();
 
     final AuthCredential credential = PhoneAuthProvider.getCredential(
       verificationId: _verificationId,
@@ -86,7 +87,7 @@ class _VerifyScreenState extends State<VerifyScreen> {
           "phone_number": widget.phoneNumber,
           "last_otp": _otp,
           "verification_id": _verificationId,
-          "uuid": user.uid,
+          "uuid": user.uid
         });
         await _storage.saveInfo(info);
 

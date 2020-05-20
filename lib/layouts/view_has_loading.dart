@@ -15,38 +15,24 @@ class ViewHasLoading extends StatefulWidget {
 }
 
 class _ViewHasLoadingState extends State<ViewHasLoading> {
-  bool _isLoading ;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    setState(() {
-      _isLoading = widget.isLoading;
-    });
 
   }
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
-      appBar: null,
-      body: Builder(
-        builder: (context) {
-          return SingleChildScrollView(
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-              color: Colors.white,
-              child: IndexedStack(
-                index: 1,
-                children: <Widget>[
-                  widget.childrenWidget,
-                  if(widget.isLoading) _loadingAnim(widget.loadingColor)
-                ],
-              ),
-            ),
-          );
-        },
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height,
+      color: Colors.white,
+      child: Stack(
+        children: <Widget>[
+          widget.childrenWidget,
+          if(widget.isLoading) _loadingAnim(widget.loadingColor)
+        ],
       ),
     );
   }
