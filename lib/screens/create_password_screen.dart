@@ -34,7 +34,7 @@ class _CreatePasswordState extends State<CreatePasswordScreen> {
 
   _initValue() async {
     /// Get shared preference
-    var _info = await _storage.getInfo();
+    SignInInfoType _info = await _storage.getInfo();
     if (_info != null) {
       setState(() {
         info = _info;

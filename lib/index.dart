@@ -21,6 +21,7 @@ export 'package:the_third/screens/splash_screen.dart';
 export 'package:the_third/screens/verify_screen.dart';
 export 'package:the_third/screens/sign_in_screen.dart';
 export 'package:the_third/screens/create_password_screen.dart';
+export 'package:the_third/screens/error_screen.dart';
 
 /// Widgets
 export "package:the_third/widgets/app_bar_widget.dart";
@@ -29,6 +30,7 @@ export 'package:the_third/widgets/app_bar_widget.dart';
 export 'package:the_third/widgets/icon_back_widget.dart';
 export 'package:the_third/widgets/group_input_widget.dart';
 export 'package:the_third/widgets/logo_widget.dart';
+export 'package:the_third/widgets/cus_input_with_label.dart';
 
 /// Styles
 export "package:the_third/styles/app_bar_style.dart";

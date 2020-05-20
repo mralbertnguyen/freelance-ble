@@ -1,6 +1,10 @@
 import 'package:the_third/index.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  ErrorWidget.builder = (errorDetails) {
+    return ErrorScreen();
+  };
+  runApp(MyApp());}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
