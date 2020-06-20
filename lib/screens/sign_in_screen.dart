@@ -68,6 +68,24 @@ class _SignInScreenState extends State<SignInScreen> {
     }
   }
 
+  /// TODO: Test function
+//_save() async{
+//  SignInInfoType info = SignInInfoType.fromJson({
+//    "phone_number": "+84869209655",
+//    "last_otp": "123456",
+//    "verification_id": "AM5PThDKMzwEmXhhJMrs3Lz9TL3ZJE7-lf_58HfRzW6Ixprkg-Cwu-gpOnbI80XdF0OvAFIwWkEFbId9LsaOvdbWyNb9J_yx0lP-KuM1Zl_7rv3ZvWrnwuCXLFB7ceJqQ1UYx_Xrk3PintykF4xcT0UQ_nK6E4iAfg",
+//    "uuid": "user.uid",
+//    "password" : "123456"
+//  });
+//  await _storage.saveInfo(info);
+//}
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+//    _save();
+  }
+
   @override
   void dispose() {
     _phoneNumberController.dispose();
@@ -91,6 +109,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 loadingColor: mainColor,
                 childrenWidget: Stack(
                   children: <Widget>[
+                    /// logo and form login
                     Column(
                       children: <Widget>[
                         /// Logo
@@ -138,8 +157,6 @@ class _SignInScreenState extends State<SignInScreen> {
                           ),
                         ),
 
-
-
                         /// Show error message
                         if (_isLoginFailed)
                           Container(
@@ -159,10 +176,10 @@ class _SignInScreenState extends State<SignInScreen> {
                           margin: EdgeInsets.only(top:20),
                             child: MainButton(title: "Đăng nhập",onPressed: _submitFormLogin,)),
 
-
-
                       ],
-                    ),             /// View show button forgot password and register
+                    ),
+
+                    /// View show button forgot password and register
                     Positioned(
                       bottom: 10,
                       right: 30,
@@ -209,7 +226,10 @@ class _SignInScreenState extends State<SignInScreen> {
                           ),
                         ),
                       ),
-                    )
+                    ),
+
+                    /// Loading view
+                    if(_isLoading) LoadingScreen()
                   ],
                 )
               ),

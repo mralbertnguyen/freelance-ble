@@ -3,8 +3,6 @@ import 'package:sms/sms.dart';
 import 'package:the_third/index.dart';
 import 'package:the_third/screens/verify_screen.dart';
 
-//import 'package:flutter_sms/flutter_sms.dart';
-
 class HomeScreen extends StatefulWidget {
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -17,51 +15,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String _receiver = "";
   SignInInfoType info;
 
-  static TextEditingController _device1TextController =
-      new TextEditingController();
-  static TextEditingController _device2TextController =
-      new TextEditingController();
-  static TextEditingController _device3TextController =
-      new TextEditingController();
-  static TextEditingController _device4TextController =
-      new TextEditingController();
-
   List<DeviceType> _devices = [];
-
-  static var initDeviceData = [
-    {
-      "name": "1",
-      "is_on": false,
-      "is_delay": false,
-      "delay_time": 0,
-      "text_controller": _device1TextController
-    },
-    {
-      "name": "2",
-      "is_on": false,
-      "is_delay": false,
-      "delay_time": 0,
-      "text_controller": _device2TextController
-    },
-    {
-      "name": "3",
-      "is_on": false,
-      "is_delay": false,
-      "delay_time": 0,
-      "text_controller": _device3TextController
-    },
-    {
-      "name": "4",
-      "is_on": false,
-      "is_delay": false,
-      "delay_time": 0,
-      "text_controller": _device4TextController
-    }
-  ];
-
-  static List<DeviceType> listDevices =
-      initDeviceData.map((i) => DeviceType.fromJson(i)).toList();
-
   void _sendSMS(String _message) async {
     try {
       String _phoneNo = info.phoneNumber;
@@ -107,31 +61,27 @@ class _HomeScreenState extends State<HomeScreen> {
 
   _addNewItem() {
     /// Check max size is 32 devices
-    if(_devices.length < 32){
-     try{
-       /// Create new device with name is next number of list devices length
-       DeviceType _newDevice = new DeviceType(
-         name: "${(_devices.length + 1).toString()}",
-         isOn: false,
-         isDelay: false,
-         delayTime: 0,
-           textController: new TextEditingController()
-       );
-       setState(() {
-         _devices.add(_newDevice);
-       });
-       showLongToast("Thêm thiết bị mới thành công");
-     }
-     catch(err){
-       showLongToast("Đã xảy ra lỗi \n Vui lòng thử lại sau!");
-       throw err;
-
-     }
-    }else{
+    if (_devices.length < 32) {
+      try {
+        /// Create new device with name is next number of list devices length
+        DeviceType _newDevice = new DeviceType(
+            name: "${(_devices.length + 1).toString()}",
+            isOn: false,
+            isDelay: false,
+            delayTime: 0,
+            textController: new TextEditingController());
+        setState(() {
+          _devices.add(_newDevice);
+        });
+        showLongToast("Thêm thiết bị mới thành công");
+      } catch (err) {
+        showLongToast("Đã xảy ra lỗi \n Vui lòng thử lại sau!");
+        throw err;
+      }
+    } else {
       /// Notice to user cause maximum size
       showLongToast("Số lượng thiết bị đã đạt giới hạn!");
     }
-
   }
 
   @override
@@ -143,12 +93,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void dispose() {
-    initDeviceData.clear();
-
-//    _device1TextController.dispose();
-//    _device2TextController.dispose();
-//    _device3TextController.dispose();
-//    _device4TextController.dispose();
     _devices.map((device) => device.textController.dispose());
 
     // TODO: implement dispose
@@ -163,7 +107,6 @@ class _HomeScreenState extends State<HomeScreen> {
           return false;
         },
         child: Scaffold(
-//        appBar: customAppBarHome(_title),
           body: Container(
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
@@ -177,21 +120,16 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Column(
                 children: <Widget>[
                   /// Title
-                  Container(
-                    margin: EdgeInsets.only(
-                        top: 20, bottom: 20, left: 30, right: 30),
-                    child: Container(
-                      width: 300,
-                      margin: EdgeInsets.only(top: 10, bottom: 10),
-                      child: Image.asset(logo1Asset, fit: BoxFit.fitWidth),
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[Logo(300)],
                   ),
 
                   /// Devices
-                  for (DeviceType device in _devices)
-                    _deviceItem(device: device),
+                  for (int i = 0; i < _devices.length; i++)
+                    _deviceItem(device: _devices[i]),
 
-                  /// View button
+                  /// View button\
                   Container(
                     margin: EdgeInsets.only(
                         top: 20, bottom: 20, left: 30, right: 30),
@@ -253,22 +191,56 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
 
                   /// Logo
-                  Container(
-                    width: 300,
-                    margin: EdgeInsets.only(top: 10, bottom: 10),
-                    child: Image.asset(logo2Asset, fit: BoxFit.fitWidth),
-                  ),
+//                  Row(
+//                    children: <Widget>[
+//                      Container(
+//                        width: 200,
+//                        margin: EdgeInsets.only(top: 10, bottom: 10),
+//                        child: Image.asset(logo2Asset, fit: BoxFit.fitWidth),
+//                      ),
+//                    ],
+//                  ),
                 ],
               ),
             ),
           ),
-          floatingActionButton: FloatingActionButton.extended(
-            onPressed: () {
-              _addNewItem();
-            },
-            label: Text('Thêm thiết bị'),
-            icon: Icon(Icons.add),
-            backgroundColor: mainColor,
+          floatingActionButton: Stack(
+            children: <Widget>[
+             if(_devices.length > 0) Align(
+                alignment: Alignment.bottomLeft,
+                child: Container(
+                  margin: EdgeInsets.only(left: 40),
+                  child: FloatingActionButton(
+
+                    onPressed: () {
+                      /// Remove last device
+                      setState(() {
+                        _devices.removeLast();
+                      });
+                      showShortToast("Đã xoá thiết bị ${_devices.length + 1}");
+
+                    },
+                    backgroundColor: Colors.red,
+                    child: Icon(Icons.delete_forever),
+                  ),
+                ),
+              ),
+
+              Align(
+                alignment: Alignment.bottomRight,
+                child:
+                FloatingActionButton.extended(
+                  onPressed: () {
+                    /// Add new device to last list
+                    _addNewItem();
+                  },
+                  label: Text('Thêm thiết bị'),
+                  icon: Icon(Icons.add),
+                  backgroundColor: mainColor,
+                ),
+              ),
+
+            ],
           ),
         ),
       ),
@@ -351,8 +323,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     decoration: InputDecoration(
                       fillColor: Colors.white,
                       focusedBorder: const OutlineInputBorder(
-                          borderSide:
-                              const BorderSide(color: Colors.white, width: 3)),
+                          borderSide: const BorderSide(
+                              color: Colors.white, width: 3)),
                       disabledBorder: const OutlineInputBorder(
                         borderSide:
                             const BorderSide(color: Colors.grey, width: 2),
