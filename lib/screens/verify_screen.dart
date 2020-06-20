@@ -76,12 +76,9 @@ class _VerifyScreenState extends State<VerifyScreen> {
     );
 
     final FirebaseUser user = (await _auth
-            .signInWithCredential(credential)
-            .catchError((e) => {_message = "${e.toString()}"}))
-        .user;
+            .signInWithCredential(credential)).user;
     final FirebaseUser currentUser = await _auth.currentUser();
     assert(user.uid == currentUser.uid);
-    setState(() async {
       if (user != null) {
         info = SignInInfoType.fromJson({
           "phone_number": widget.phoneNumber,
@@ -97,7 +94,6 @@ class _VerifyScreenState extends State<VerifyScreen> {
           _message = 'Vui lòng kiểm tra lại mã OTP';
         });
       }
-    });
   }
 
   @override

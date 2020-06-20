@@ -13,7 +13,7 @@ class CusInputWithLabel extends StatefulWidget {
       @required this.textEditingController,
       @required this.keyboardType,
       @required this.onValidator,
-      this.isSecure});
+      this.isSecure:false});
 
   @override
   _CusInputWithLabelState createState() => _CusInputWithLabelState();
@@ -70,7 +70,7 @@ class _CusInputWithLabelState extends State<CusInputWithLabel> {
                   borderSide: new BorderSide(color: Colors.red),
                 ),
                 focusColor: Colors.black,
-                suffixIcon: this._isSecure ? IconButton(
+                suffixIcon: widget.isSecure ? IconButton(
                   icon: Icon(
                     _isSecure ?? false
                         ? Icons.visibility

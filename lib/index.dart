@@ -31,6 +31,7 @@ export 'package:the_third/widgets/icon_back_widget.dart';
 export 'package:the_third/widgets/group_input_widget.dart';
 export 'package:the_third/widgets/logo_widget.dart';
 export 'package:the_third/widgets/cus_input_with_label.dart';
+export 'package:the_third/widgets/main_button_widget.dart';
 
 /// Styles
 export "package:the_third/styles/app_bar_style.dart";

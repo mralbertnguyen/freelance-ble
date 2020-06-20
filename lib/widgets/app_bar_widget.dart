@@ -8,6 +8,7 @@ Widget customAppBarBack(String title) {
       backgroundColor: Colors.white,
       bottomOpacity: 0.0,
       centerTitle: true,
+      elevation: 0.0,
       leading: Builder(
         builder: (BuildContext context) {
           return customIconBackHasBr(context);

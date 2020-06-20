@@ -48,7 +48,7 @@ class _GroupInputTextState extends State<GroupInputText> {
       FocusNode focusNode, FocusNode prevNode, FocusNode nextFocus) {
     return Container(
       height: 80,
-      width: 65,
+      width: 55,
       margin: EdgeInsets.only(left: 12.5, right: 12.5),
       child: TextFormField(
         controller: txtController,
@@ -96,8 +96,8 @@ Widget inputCode(TextEditingController controller, int pinLength, bool hasError,
   return PinCodeTextField(
     autofocus: true,
     controller: controller,
-    pinBoxHeight: 70.0,
-    pinBoxWidth: 50.0,
+    pinBoxHeight: 50.0,
+    pinBoxWidth: 40.0,
     hideCharacter: false,
     highlight: true,
     highlightColor: mainColor,

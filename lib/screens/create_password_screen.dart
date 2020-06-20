@@ -28,6 +28,11 @@ class _CreatePasswordState extends State<CreatePasswordScreen> {
         await _storage.saveInfo(info);
 
         showLongToast("Tạo mật khẩu mới thành công.");
+
+        /// TODO: back to login screen
+        Navigator.of(context).pop();
+        Navigator.of(context).pop();
+        Navigator.of(context).pop();
       }
     }
   }
@@ -40,7 +45,7 @@ class _CreatePasswordState extends State<CreatePasswordScreen> {
         info = _info;
       });
     } else {
-      showShortToast("Can not get info data");
+      print("Can not get info data");
     }
   }
 
@@ -138,36 +143,10 @@ class _CreatePasswordState extends State<CreatePasswordScreen> {
 
                   /// Button submit
                   Container(
-                    margin: EdgeInsets.only(left: 30, right: 30),
-                    padding: EdgeInsets.only(left: 20, right: 20),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Expanded(
-                          child: Container(
-                            padding: EdgeInsets.all(10),
-                            margin: EdgeInsets.only(top: 20),
-                            decoration: BoxDecoration(
-                                color: Colors.amber.withOpacity(0.7),
-                                border:
-                                    Border.all(color: Colors.amber, width: 1),
-                                borderRadius: BorderRadius.circular(5)),
-                            child: FlatButton(
-                              padding: EdgeInsets.all(0),
-                              onPressed: _createNewPassword,
-                              child: Text(
-                                "Tạo mật khẩu mới",
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 20,
-                                ),
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  )
+                      margin: EdgeInsets.only(top:20),
+                      child: MainButton(title: "Tạo mật khẩu mới",onPressed: _createNewPassword,)),
+
+
                 ],
               ),
             ),

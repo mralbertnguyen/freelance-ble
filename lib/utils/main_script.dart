@@ -11,7 +11,7 @@ class Storage {
       if (_info != null) {
         info = SignInInfoType.fromJson(json.decode(_info));
       } else {
-        showShortToast("Can not get info data");
+        print("Can not get info data");
       }
 
       print("Storage => getInfo => Result => ${json.encode(info)}");
